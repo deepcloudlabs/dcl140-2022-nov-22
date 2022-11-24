@@ -10,19 +10,21 @@
  * -1 if in an illegal position (first or last index in the array),
  * or 0 if not present.
  */
-int pipe_present(char ** myCurrentArgv) {
+int pipe_present(char ** argv) {
   int index;
 
   /* Search through myCurrentArgv for a match on "|". */
+  for (index=0;argv[index]!=NULL;index++){
+      if ( strcmp(argv[index],"|") == 0)
+         break;
+  }
 
-  if /* At the beginning or at the end. */ {
+  if ( (index==0) || ((argv[index]!= NULL) && (argv[index+1] == NULL)) ) {
     return -1;
 
-  } else if /* Off the end. */ {
+  } else if (argv[index]== NULL) {
     return 0;
-
   } else {
-    /* In the middle. */
     return index;
   }
 }

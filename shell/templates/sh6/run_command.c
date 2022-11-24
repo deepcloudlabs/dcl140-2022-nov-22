@@ -48,9 +48,16 @@ void run_command(char **myArgv) {
     case 0 :
 
       /* Redirect input and update argv. */
+      if( redirect_in(myArgv) ){
+        fprintf(stderr,"Cannot read from input file.");
+        exit(errno);
+      }
 
       /* Redirect output and update argv. */
-
+      if( redirect_out(myArgv) ){
+        fprintf(stderr,"Cannot create output file.");
+        exit(errno);
+      }
       execvp(*myArgv,myArgv);		/* Run command in child process. */
       perror(myArgv[0]);		/* No successful return from exec */
       exit(errno);

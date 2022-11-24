@@ -16,21 +16,27 @@ int redirect_out(char ** myArgv) {
   int fd;
 
   /* search forward for > */
-  /* Fill in code. */
-
+  for(i=0; myArgv[i] != NULL; i++){  
+      if ( strcmp(myArgv[i], ">") == 0){
+         break;
+      }
+  }
   if (myArgv[i]) {	/* found ">" in vector. */
 
     /* Open file. */
-    /* Fill in code. */
-
+    if ((fd = open(myArgv[i+1], O_WRONLY | O_TRUNC | O_CREAT, 0666)) == -1){
+       perror(myArgv[i+1]); 
+       return -1;
+    }
     /* Redirect to use it for output. */
-    /* Fill in code. */
-
-    /* Cleanup / close unneeded file descriptors. */
-    /* Fill in code. */
+    dup2(fd,STDOUT_FILENO);
+    close(fd);   
 
     /* Remove the > and the filename from myArgv. */
-    /* Fill in code. */
+    for(i=i+2; myArgv[i] != NULL; i++){  
+       myArgv[i-2] = myArgv[i];
+    }
+    myArgv[i-2] = NULL;
   }
   return 0;
 }

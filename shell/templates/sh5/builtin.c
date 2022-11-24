@@ -21,14 +21,13 @@
 
 /* "builtin" command tells whether a command is builtin or not. */
 static void bi_builtin(char ** argv) {
-  /* Fill in code. */
+   if(argv[1]){
+     int is_bi = is_builtin(argv[1]);
+     printf("%s is %sa built in feature\n",argv[1], is_bi ? "" : "not ");   
+   } 
 }
 
 
-/* "cd" command.  Why does this have to be a shell builtin command? */
-static void bi_cd(char **argv) {
-  /* Fill in code. */
-}
 
 
 /* "echo" command.  Does not print final <CR> if "-n" encountered. */
@@ -53,21 +52,35 @@ static void bi_echo(char **argv) {
 
 /* "hostname" command. */
 static void bi_hostname(char ** argv) {
-  /* Fill in code. */
+    static struct utsname my_uname;
+    if (!my_uname.nodename[0])
+       uname(&my_uname);
+    printf("%s\n",my_uname.nodename);
 }
 
 
 /* "id" command shows user and group of this process. */
 static void bi_id(char ** argv) {
-  /* Fill in code. */
+ uid_t id = getuid();
+ struct passwd *mypwd = getpwuid(id);
+ struct group *my_group = getgrgid(mypwd->pw_gid);
+
+ printf("Userid = %d (%s), Groupid = %d (%s)\n",id,mypwd->pw_name,mypwd->pw_gid,my_group->gr_name); 
 }
 
 
 /* "pwd" command. */
 static void bi_pwd(char ** argv) {
-  /* Fill in code. */
+  static char buffer[PATH_MAX];
+  printf("%s\n",getcwd(buffer,PATH_MAX));
 }
 
+/* "cd" command.  Why does this have to be a shell builtin command? */
+static void bi_cd(char **argv) {
+   char* path = argv[1] ? argv[1] : getenv("HOME") ;
+   if (chdir(path) == -1)
+      perror("cd"); 
+}
 
 /* quit/exit/logout/bye command. */
 static void bi_quit(char **argv) {
@@ -87,6 +100,9 @@ static struct cmd {
 
   /* Fill in code. */
 
+  { "cd", 	bi_cd},
+  { "pwd", 	bi_pwd},
+  { "id", 	bi_id},
   { "echo", 	bi_echo},
   { "quit",	bi_quit},
   { "exit",	bi_quit},
