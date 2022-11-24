@@ -13,17 +13,16 @@ int lookup(Dictrec * sought, const char * resource) {
 
   if (first_time) { 
     first_time = 0;
-    /* open up the file */
-    /* Fill in code. */
+    if ((in = fopen(resource, "r")) == NULL)
+       return UNAVAIL;
   }
 
-  /* read from top of file, looking for match */
-  /* Fill in code. */
   rewind(in);
-  while(________) {
-    /* Fill in code. */
-    return FOUND;
+  while(fread(&dr,sizeof(dr),1,in) > 0) {
+    if (strcmp(sought->word, dr.word) == 0){
+       strcpy(sought->text, dr.text);
+       return FOUND;
     }
-
+  }
   return NOTFOUND;
 }

@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 #include "shell.h"
 
@@ -25,14 +27,14 @@ void run_command(char **myArgv) {
    * as a side effect.
    */
   run_in_background = is_background(myArgv);
-  if ( !strcmp(myArgv[0], "time") ){
-     set_timer();
-     timer_started = TRUE;
-     for (i=1;myArgv[i]!=NULL;++i)
-         myArgv[i-1] = myArgv[i];
-     myArgv[i-1] = NULL;
 
+  if( strcmp(myArgv[0],"time") == 0){
+    set_timer();
+    timer_started = TRUE;
+    for (i=0;myArgv[i]!= NULL;++i)
+        myArgv[i] = myArgv[i+1];
   }
+
   switch(pid = fork()) {
 
     /* Error. */
@@ -45,9 +47,9 @@ void run_command(char **myArgv) {
       if (!run_in_background) {
 
         waitpid(pid,&stat,0);	/* Wait for child to terminate. */
-        if (timer_started){
-           stop_timer();
-           timer_started = FALSE;
+        if(timer_started){
+          stop_timer();
+          timer_started= FALSE;
         }
 	display_status(pid, stat);
       }

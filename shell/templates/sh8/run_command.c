@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 #include <sys/wait.h>
 #include "shell.h"
@@ -41,7 +43,7 @@ void run_command(char **myArgv) {
 
       /* Restore default signal handling for ^C and ^\. */
       sigset(SIGINT, SIG_DFL); 
-      sigset(SIGQUIT, SIG_DFL);       
+      sigset(SIGQUIT, SIG_DFL); 
 
       if (redirect_in(myArgv)) {	/* Redirect input and update argv. */
 	fputs ("Missing input file.", stderr);

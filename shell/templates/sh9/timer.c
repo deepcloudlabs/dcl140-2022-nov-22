@@ -24,12 +24,13 @@ void stop_timer(void) {
   clock_t new;
   double ticks;
   ticks = sysconf(_SC_CLK_TCK);
-  /* Get delta times and print them out. */
-  new = times(&tmbuf); 
-  if (old){
-    fprintf(stderr, "Sys %6.2f User %6.2f Real %6.2f\n",tmbuf.tms_cstime/ticks,
-       tmbuf.tms_cutime/ticks, (new-old)/ticks ); 
-    old=0;
+  new = times(&tmbuf);
+  if(old){
+    fprintf(stderr,"Sys %6.2f User %6.2f Real %6.2f\n",
+          tmbuf.tms_cstime/ticks,
+          tmbuf.tms_cutime/ticks,
+          (new-old)/ticks);
   }
+
 }
 

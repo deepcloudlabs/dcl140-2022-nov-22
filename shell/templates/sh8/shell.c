@@ -19,10 +19,7 @@ main() {
   sigset(SIGQUIT, SIG_IGN); 
 
   /* Optional exercise: Set up to reap children run in the background. */
-  child_handling.sa_handler = child_handler;
-  child_handling.sa_flags = SA_RESTART;
-  sigfillset(&child_handling.sa_mask);  
-  //sigaction(SIGCHLD, &child_handling,(struct sigaction*) NULL);
+  /* Fill in code. */
 
   fputs("myshell -> ",stdout);
   while (fgets(line,LONGLINE,stdin)) {
